@@ -1,18 +1,12 @@
-.# DVXK-mod
-DXVK modifications for old resident evil 6 and revelations 2 engines (fixing stuttering)
-##Contains specific DXVK configuration files to fix the 1-second freezes and constant micro-stutters in Resident Evil 6 and Revelations 2.
-
-These fixes are specifically tuned for Intel HD/UHD graphics (like the Intel HD 630) but work for anyone whose hardware should be running these games smoothly but isn't.
-​The stuttering happens because the MT Framework engine has a logic bottleneck where the CPU and GPU share memory. These config files bypass those "handshakes" and force the engine to process data without locking the CPU.
-​Files Included
-​Resident Evil 6 folder: dxvk.conf
-​RE Revelations 2 folder: dxvk.conf
-​Required Binaries: You must download DXVK 1.10.3 manually (see instructions below)
-##​Installation Instructions**
-​Download DXVK version 1.10.3 from the official releases. Do not use newer versions as they may not be compatible with integrated graphics drivers.
-​From the x32 folder of the DXVK download, copy d3d9.dll and dxgi.dll into your game's main folder (where the .exe is).
-​Copy the dxvk.conf from this repository into the same game folder.
-​For Revelations 2: You must also edit your game's internal config.ini (usually in AppData/Local/CAPCOM) with the settings listed below.
-​Important Ritual for Revelations 2
-​Revelations 2 has a broken internal clock. Every time you launch the game, go to Graphics Settings, set the frame rate to 30 for a few seconds, move around, and then set it back to Variable. This aligns the engine with your hardware and kills any remaining rhythmic stutter.
-​Resident Evil 6 Config (dxvk.conf)
+A definitive fix for resident evil 6 and revelations 2 crappy stutter.
+Just download the files copy and past them into the root of your game folder.
+For more details, read this:
+If you’re here, it’s because you’re tired of the "MT Framework Special"—that absolute bullshit where a game from 2012 freezes for a full second just because a zombie decided to show up or you dared to pull the trigger. You know your hardware isn't the problem, but the game engine is acting like it’s allergic to your Intel chip.
+​We’re not just lowering settings here; we are literally rewriting how this game thinks.
+​What the hell was happening?
+​The "ghost in the machine" is a memory bottleneck. Every time RE6 or Rev 2 needs to load a texture for a floor, a door, or a blood splatter, the engine pulls the emergency brake on your CPU to wait for the GPU. On integrated graphics, this "handshake" is broken, and that’s where those 1-second freezes come from. The game isn't lagging; it's literally stopping to ask for permission to continue.
+​How we fixed it
+​We used DXVK by doitsujin to move the game to Vulkan, which let us get under the hood with a .conf file to change the engine’s logic.
+​The Handshake Fix: We killed allowDirectBufferMapping. This tells the engine to stop locking the system and just "stage" the data. It’s why you can now walk through doors and floors without the game tripping over itself.
+​The Latency Sweet Spot: We found the balance at maxFrameLatency = 2. Setting it to 1 stopped the freezes but made the game feel like a slide show. At 2, the CPU can finally "breathe" and prep the next frame while the current one is rendering. This brings back the smoothness you actually want.
+​The Explosion Logic: Those gunshot freezes were caused by an ancient format called R2VB that Intel chips hate. We used floatEmulation = 0 to bypass that trash and deferredSurfaceCreation = False to make sure effects are ready before you even see them.
