@@ -12,3 +12,6 @@ If your game hitched every time you fired a gun, it’s because of an ancient te
 
 THE REV 2 ENGINE RESET
 Revelations 2 is a disaster under the hood. It has a bugged internal clock that gets out of sync with your hardware. That’s why you have to do the <mark>ritual</mark>: launch the game, switch to 30 FPS for a few seconds, then flip it back to Variable. It’s like a <mark>jump-start for the engine’s heart</mark> to make sure all our technical fixes actually align with your monitor's refresh rate.**
+IMPORTANT: The original DXVK Project belongs to DOITSUJIN.
+TO INSTALL JUST COPY AND PAST THE FILES IN THE ROOT OF YOUR GAME FOLDER WEHTHER IT IS RESIDENT EVIL 6 OR REVELATIONS 2.
+IF ANYONE IS STILL STRUGGLING WITH THIS EVEN AFTER IMPLEMENTING THE FIX PLEASE POST YOUR DIRECT X LOG.
