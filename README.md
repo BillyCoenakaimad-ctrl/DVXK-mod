@@ -1,19 +1,38 @@
-**THE "GHOST" IN THE ENGINE
-The stuttering you're seeing isn't because your PC is weak. It’s a memory bottleneck. Every time RE6 or Rev 2 needs to load a texture for a floor, a door, or a blood splatter, the engine pulls the <mark>emergency brake</mark> on your CPU to wait for the integrated GPU. On Intel chips, this "handshake" is broken. The game isn't lagging; it's literally stopping to ask for permission to continue. We fixed this by moving the game to Vulkan using DXVK, which lets us <mark>rewrite the engine's logic</mark>.
+HOW TO USE: JUST COPY AND PAST THE DLL AND CONF FILES TO YOUR SPECIFIC GAME FOLDER (where the .exe exists)
+HOW THIS FIXES THE RESIDENT EVIL REVELATIONS 2 STUTTERING ISSUE:
+. Bypassing the OS "Middleman"
+dxgi.tearFree = False
 
-KILLING THE 1-SECOND FREEZE
-The first thing we did was kill the memory lock. By disabling allowDirectBufferMapping, we told the engine to stop trying to access the GPU's memory in a way that <mark>freezes the system</mark>. Instead of the CPU and GPU constantly interrupting each other, they now use a "staging" method. This is why you can finally walk through doors and over new floor textures without the game <mark>tripping over its own feet</mark>.
+dxgi/d3d9.numBackBuffers = 2 In Windows 7, when you went "Fullscreen," the game took total control of your monitor. In Windows 10/11, the OS forces a "windowed" layer over everything so you can Alt-Tab faster. This layer adds a tiny delay (stutter). By setting tearFree to False and limiting BackBuffers to 2, you are telling DXVK: "Don't try to sync with the Windows Desktop Manager; just send the frames straight to the GPU as fast as they are ready." It restores that "raw" connection the game had back in 2015.
 
-RESTORING THE SMOOTHNESS
-Earlier tweaks made the game stable but "heavy" or slow. We fixed that by finding the sweet spot with maxFrameLatency = 2. At a value of 1, the game was too strict and felt like a slideshow. By bumping it to 2, we gave the CPU just enough room to start working on the next frame while the current one is still on screen. It <mark>restores that "liquid" flow</mark> to the movement while keeping the lag dead.
+. Preventing "Memory Churn"
+d3d9.memory_pool = "system" #imp: This is arguably the most important line for Capcom's MT Framework engine. Modern Windows likes to move data in and out of your Video RAM (VRAM) constantly to save space. However, Revelations 2 expects its assets to stay exactly where it put them. By forcing the memory pool to system, DXVK creates a "mapped" area where the CPU and GPU can both see the data instantly without the OS "paging" (swapping) it out. This stops those micro-stutters that happen when you turn a corner or open a door.
 
-FIXING GUNSHOTS AND EXPLOSIONS
-If your game hitched every time you fired a gun, it’s because of an ancient tech called R2VB that Intel HD chips don't understand. The engine <mark>panics</mark> trying to calculate sparks and blood. We used floatEmulation = 0 to bypass that trash and deferredSurfaceCreation = False to force the game to have those effects ready before you pull the trigger. <mark>No more "hiccups" mid-combat</mark>.
+. Tightening the "Handshake"
+d3d9.maxFrameLatency = 1 By default, modern Windows tries to "queue up" 3 or 4 frames ahead of time to make things look smooth. But in a game with an unoptimized CPU engine like this one, the CPU often falls behind the GPU. This "latency" causes a desync where the game hitches while the CPU tries to catch up. Setting this to 1 forces the CPU and GPU to stay in a tight "1-to-1" lockstep. It's more demanding on the hardware, but it eliminates the "rubbery" feeling and the erratic frame delivery.
 
-THE REV 2 ENGINE RESET
-Revelations 2 is a disaster under the hood. It has a bugged internal clock that gets out of sync with your hardware. That’s why you have to do the <mark>ritual</mark>: launch the game, switch to 30 FPS for a few seconds, then flip it back to Variable. It’s like a <mark>jump-start for the engine’s heart</mark> to make sure all our technical fixes actually align with your monitor's refresh rate.**
-IMPORTANT: The original DXVK Project belongs to DOITSUJIN.
-TO INSTALL JUST COPY AND PAST THE FILES IN THE ROOT OF YOUR GAME FOLDER WEHTHER IT IS RESIDENT EVIL 6 OR REVELATIONS 2.
-IF ANYONE IS STILL STRUGGLING WITH THIS EVEN AFTER IMPLEMENTING THE FIX PLEASE POST YOUR DIRECT X LOG.
+. Simplifying Visual Handshakes
+d3d9.forceSwapchainMSAA = 0 The "Flashlight Stutter" in this game happens because the lighting effects use a specific transparency technique that modern Anti-Aliasing (MSAA) struggles to interpret. By forcing the SwapchainMSAA to 0, you ensure that DXVK isn't trying to apply modern smoothing techniques to legacy lighting effects, which keeps the frame timing flat and consistent instead of "spiking" every time you aim your light.
 
+HOW THIS FIXES THE RESIDENT EVIL 6 STUTTERING ISSUE
+. d3d9.allowDirectBufferMapping = False
+This is the "Silver Bullet" for Resident Evil 6.
+
+The Problem: RE6 (and several other Capcom games) uses a very old method of "talking" to the GPU where it asks to write data directly into the GPU's memory buffers. On modern Windows 10/11 drivers, this often causes a "Sync Lock." The CPU has to stop and wait for the GPU to finish everything it’s doing before it can write that data.
+
+The Fix: By setting this to False, you tell DXVK to use an intermediate "staging" area. The CPU writes its data to a temporary spot and moves on immediately, and DXVK handles the transfer to the GPU in the background. This eliminates the "hiccup" every time the game tries to update character models or lighting.
+
+. d3d9.deferredSurfaceCreation = True
+This line targets "loading stutters" and transition hitches.
+
+The Problem: RE6 often tries to create new textures and surfaces (like blood splatters, fire effects, or new room textures) the exact millisecond they are needed. This causes a frame drop because the game pauses to build that surface.
+
+The Fix: This tells DXVK to "defer" or delay the actual creation of these surfaces until the GPU is in a quiet moment or to handle it more efficiently in the background. It prevents the engine from "choking" when a lot of new visual effects appear on screen at once (like during the explosive Leon/Helena campaign).
+
+. dxvk.hud = fps
+While this seems like just a counter, it actually serves a hidden "stabilizing" purpose in some environments.
+
+The Science: When the DXVK HUD is active, it forces a very specific, consistent polling rate for the Vulkan overlay. In some weird edge cases with Windows' Desktop Window Manager (DWM), having an active overlay can actually help keep the GPU "awake" and prevent it from aggressive power-saving downclocks that cause micro-stuttering.
+
+Mainly: It’s also just great for you to see that your Frame Times (the line graph) are flat, which confirms the stutters are gone!
 UPDATE 1.1 final update: Figured out that for resident evil revelations 2 the mod I created doesn't get rid of stutter, it only improves performance, I deduced that it's an OS compatibility issue especially after reading people's comments how the game used to run perfectly on windows 7, so I tried to work on it taking that into consideration: IT WORKED, HAVE FUN!
