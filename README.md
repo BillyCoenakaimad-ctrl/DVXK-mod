@@ -15,3 +15,5 @@ Revelations 2 is a disaster under the hood. It has a bugged internal clock that 
 IMPORTANT: The original DXVK Project belongs to DOITSUJIN.
 TO INSTALL JUST COPY AND PAST THE FILES IN THE ROOT OF YOUR GAME FOLDER WEHTHER IT IS RESIDENT EVIL 6 OR REVELATIONS 2.
 IF ANYONE IS STILL STRUGGLING WITH THIS EVEN AFTER IMPLEMENTING THE FIX PLEASE POST YOUR DIRECT X LOG.
+
+UPDATE 1.1 final update: Figured out that for resident evil revelations 2 the mod I created doesn't get rid of stutter, it only improves performance, I deduced that it's an OS compatibility issue especially after reading people's comments how the game used to run perfectly on windows 7, so I tried to work on it taking that into consideration: IT WORKED, HAVE FUN!
