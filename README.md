@@ -1,4 +1,5 @@
 UPDATE: 1.2: I thought there was no room for improvement for this project, figured out there is still, since this is what I might call fighting a ghost machine. From now on this project will only focus on fixing resident evil revelations 2.
+
 HOW TO USE (please read carefully): FIRST, RIGHT CLICK REV2.EXE, GO TO PROPERTIES, COMPATIBILITY AND THEN CHECK "Disable fullscreen optimizations" AND "RUN THIS PROGRAM AS AN ADMINISTRATOR" then click APPLY, AFTER THAT, COPY AND PAST THE DLL AND CONF FILES TO YOUR GAME FOLDER (where the RE REV2.exe exists)
 
 HOW THIS FIXES THE RESIDENT EVIL REVELATIONS 2 STUTTERING ISSUE:
