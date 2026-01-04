@@ -4,7 +4,7 @@ HOW THIS FIXES THE RESIDENT EVIL REVELATIONS 2 STUTTERING ISSUE:
 . Bypassing the OS "Middleman"
 dxgi.tearFree = False
 
-dxgi/d3d9.numBackBuffers = 2 In Windows 7, when you went "Fullscreen," the game took total control of your monitor. In Windows 10/11, the OS forces a "windowed" layer over everything so you can Alt-Tab faster. This layer adds a tiny delay (stutter). By setting tearFree to False and limiting BackBuffers to 2, you are telling DXVK: "Don't try to sync with the Windows Desktop Manager; just send the frames straight to the GPU as fast as they are ready." It restores that "raw" connection the game had back in 2015.
+dxgi/d3d9.numBackBuffers = 2 In Windows 7, when you go "Fullscreen," the game takes total control of your monitor. In Windows 10/11, the OS forces a "windowed" layer over everything so you can Alt-Tab faster. This layer adds a tiny delay (stutter). By setting tearFree to False and limiting BackBuffers to 2, you are telling DXVK: "Don't try to sync with the Windows Desktop Manager; just send the frames straight to the GPU as fast as they are ready." It restores that "raw" connection the game had back in 2015.
 
 . Preventing "Memory Churn"
 d3d9.memory_pool = "system" #imp: This is arguably the most important line for Capcom's MT Framework engine. Modern Windows likes to move data in and out of your Video RAM (VRAM) constantly to save space. However, Revelations 2 expects its assets to stay exactly where it put them. By forcing the memory pool to system, DXVK creates a "mapped" area where the CPU and GPU can both see the data instantly without the OS "paging" (swapping) it out. This stops those micro-stutters that happen when you turn a corner or open a door.
