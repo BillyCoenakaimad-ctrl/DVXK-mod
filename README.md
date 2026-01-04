@@ -1,18 +1,14 @@
-UPDATE: 1.2: I thought there was no room for improvement for this project, figured out there is still, since this is what I might call fighting a ghost machine. From now on this project will only focus on fixing resident evil revelations 2.
+UPDATE: 1.2: I THOUGHT THERE WAS NO ROOM FOR IMPROVEMENT FOR THIS PROJECT, FIGURED OUT THERE IS STILL, SINCE THIS IS WHAT I MIGHT WANT TO CALL FIGHTING A GHOST MACHINE. FROM NOW ON THIS PROJECT WILL ONLY FOCUS ON FIXING RESIDENT EVIL REVELATIONS 2.
 
-HOW TO USE (please read carefully): FIRST, RIGHT CLICK REV2.EXE, GO TO PROPERTIES, COMPATIBILITY AND THEN CHECK "Disable fullscreen optimizations" AND "RUN THIS PROGRAM AS AN ADMINISTRATOR" then click APPLY, AFTER THAT, COPY AND PAST THE DLL AND CONF FILES TO YOUR GAME FOLDER (where the RE REV2.exe exists)
+HOW TO USE (please read carefully): FIRST, RIGHT CLICK REV2.EXE, GO TO PROPERTIES, COMPATIBILITY AND THEN CHECK "Disable fullscreen optimizations" AND "RUN THIS PROGRAM AS AN ADMINISTRATOR" then click APPLY, AFTER THAT, COPY AND PAST THE DLL AND CONF FILES TO YOUR GAME FOLDER (where the RE REV2.exe exists). READ BELOW.
 
-HOW THIS FIXES THE RESIDENT EVIL REVELATIONS 2 STUTTERING ISSUE:
-. Bypassing the OS "Middleman"
-dxgi.tearFree = False
+ COMMON ISSUES:
 
-dxgi/d3d9.numBackBuffers = 2 In Windows 7, when you go "Fullscreen," the game takes total control of your monitor. In Windows 10/11, the OS forces a "windowed" layer over everything so you can Alt-Tab faster. This layer adds a tiny delay (stutter). By setting tearFree to False and limiting BackBuffers to 2, you are telling DXVK: "Don't try to sync with the Windows Desktop Manager; just send the frames straight to the GPU as fast as they are ready." It restores that "raw" connection the game had back in 2015.
+ #IF THE GAME DOESN'T LAU?CH AFTER INSTALLING THE MOD, IT'S MOST CERTAINLY A COMPATIBILITY ISSUE, IT'S PROBABLY YOUR GPU DRIVERS BEING INCOMPATIBLE WITH THE DXVK RELEASE. TO SOLVE THIS YOU SHOULD TRY TO FIND A DXVK RELEASE THAT IS COMPATIBLE WITH YOUR GPU DRIVERS, IT SHOULD BE BETWEEN 1.5 (this is where directx9 STARTED GETTING SUPPORTED) AND THE LATEST VERSION 2.7.1. 
 
-. Preventing "Memory Churn"
-d3d9.memory_pool = "system" #imp: This is arguably the most important line for Capcom's MT Framework engine. Modern Windows likes to move data in and out of your Video RAM (VRAM) constantly to save space. However, Revelations 2 expects its assets to stay exactly where it put them. By forcing the memory pool to system, DXVK creates a "mapped" area where the CPU and GPU can both see the data instantly without the OS "paging" (swapping) it out. This stops those micro-stutters that happen when you turn a corner or open a door.
+ LINK TO THE DXVK RELEASES BY DOITSUJIN: https://github.com/doitsujin/dxvk/releases?page=1
 
-. Tightening the "Handshake"
-d3d9.maxFrameLatency = 1 By default, modern Windows tries to "queue up" 3 or 4 frames ahead of time to make things look smooth. But in a game with an unoptimized CPU engine like this one, the CPU often falls behind the GPU. This "latency" causes a desync where the game hitches while the CPU tries to catch up. Setting this to 1 forces the CPU and GPU to stay in a tight "1-to-1" lockstep. It's more demanding on the hardware, but it eliminates the "rubbery" feeling and the erratic frame delivery.
+#THE MOD SIMPLY NOT MAKING ANY CHANGES: YOU SHOULD ALWAYS MAKE SURE THE GAME IS USING OUR DX9 AND THEREFORE THE MODIFICATIONS, ONE OF THE SIGNS ARE THE GAME CREATING A FILE NAMED "rerev2.dxvk-cache" or "rerev2_d3d9.log", ONE OF THE REASONS WHY YOU MIGHT FALL INTO THIS IS NOT USING THE x32 VERSION OF DXVK, IN CASE YOU ARE FACING THE DRIVERS COMPATIBILITY ISSUE AND YOU WANTED TO USE A DIFFERENT RELEASE MAKE SURE YOU PICK THE FILES FROM x32, RE REV 2 IS A 32 BIT GAME.
 
-. Simplifying Visual Handshakes
-d3d9.forceSwapchainMSAA = 0 The "Flashlight Stutter" in this game happens because the lighting effects use a specific transparency technique that modern Anti-Aliasing (MSAA) struggles to interpret. By forcing the SwapchainMSAA to 0, you ensure that DXVK isn't trying to apply modern smoothing techniques to legacy lighting effects, which keeps the frame timing flat and consistent instead of "spiking" every time you aim your light.
+PS: Feel free to report your issues.
+
