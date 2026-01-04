@@ -1,4 +1,5 @@
 HOW TO USE: JUST COPY AND PAST THE DLL AND CONF FILES TO YOUR SPECIFIC GAME FOLDER (where the .exe exists)
+
 HOW THIS FIXES THE RESIDENT EVIL REVELATIONS 2 STUTTERING ISSUE:
 . Bypassing the OS "Middleman"
 dxgi.tearFree = False
@@ -35,4 +36,5 @@ While this seems like just a counter, it actually serves a hidden "stabilizing" 
 The Science: When the DXVK HUD is active, it forces a very specific, consistent polling rate for the Vulkan overlay. In some weird edge cases with Windows' Desktop Window Manager (DWM), having an active overlay can actually help keep the GPU "awake" and prevent it from aggressive power-saving downclocks that cause micro-stuttering.
 
 Mainly: It’s also just great for you to see that your Frame Times (the line graph) are flat, which confirms the stutters are gone!
+
 UPDATE 1.1 final update: Figured out that for resident evil revelations 2 the mod I created doesn't get rid of stutter, it only improves performance, I deduced that it's an OS compatibility issue especially after reading people's comments how the game used to run perfectly on windows 7, so I tried to work on it taking that into consideration: IT WORKED, HAVE FUN!
